@@ -1,0 +1,90 @@
+//Para criar um relatório, basta injetar um RelatorioUtil
+
+@Inject
+RelatorioUtil relatorio;
+
+
+public void emitirPdf() {
+	Map<String, Object> parametros = new HashMap<>();
+
+	relatorio.gerarRelatorio(parametros, "usuarios.jasper",
+			"relatorio", EnumRelatorioUtil.RELATORIO_PDF);
+	if (relatorio.isRelatorioGerado()) {
+		facesContext.responseComplete();
+	} else {
+		FacesUtil.addErrorMessage("A execução do relatório não retornou dados.");
+	}
+}
+
+public void emitirExcel() {
+	Map<String, Object> parametros = new HashMap<>();
+		relatorio.gerarRelatorio(parametros, "usuarios.jasper",
+			"relatorio", EnumRelatorioUtil.RELATORIO_EXCEL);
+	if (relatorio.isRelatorioGerado()) {
+		facesContext.responseComplete();
+	} else {
+		FacesUtil.addErrorMessage("A execução do relatório não retornou dados.");		}
+	}
+public void emitirHtml() {
+	Map<String, Object> parametros = new HashMap<>();
+
+	relatorio.gerarRelatorio(parametros, "usuarios.jasper",
+			"relatorio", EnumRelatorioUtil.RELATORIO_HTML);
+	if (relatorio.isRelatorioGerado()) {
+		facesContext.responseComplete();
+	} else {
+		FacesUtil.addErrorMessage("A execução do relatório não retornou dados.");
+	}
+}
+public void emitirOpenOffice() {
+	Map<String, Object> parametros = new HashMap<>();
+
+	relatorio.gerarRelatorio(parametros, "usuarios.jasper",
+			"relatorio", EnumRelatorioUtil.RELATORIO_PLANILHA_OPEN_OFFICE);
+	if (relatorio.isRelatorioGerado()) {
+		facesContext.responseComplete();
+	} else {
+		FacesUtil.addErrorMessage("A execução do relatório não retornou dados.");		}
+}
+
+
+
+
+//*********************************************************
+
+Para os relatórios em Excel funcionar eu tive que incluir a dependência abaixo
+
+
+                <!-- Apache poi (Utilitário para gerar o relatório para o EXCEL) -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.10-FINAL</version>
+			<scope>compile</scope>
+		</dependency>
+
+
+//*********************************************************
+
+Colega Thiago Felipe,
+
+Peguei sua classe "RelatorioUtil" e estou com erro de compilação "ConstantReport cannot be resolved to a variable" na linha abaixo:
+- throw new SQLException("Erro ao executar relatório " + ConstantReport.PATH_RESOURCE_JASPER + this.nomeRelatorioJasper, e);
+Thiago Felippe de Lima Bandeira
+Thiago Felippe de Lima Bandeira - 12/11/2014 às 10:20
+Marcos, o PATH é o local onde eu coloquei o meu template do JASPER.
+
+public class ConstantReport {
+
+	public static final String PATH_RELATORIO_JASPER = "/relatorios/";
+
+}
+
+Você pode escolher qualquer local. Eu coloquei dentro de src/main/resources/relatorios
+
+
+
+
+
+
+

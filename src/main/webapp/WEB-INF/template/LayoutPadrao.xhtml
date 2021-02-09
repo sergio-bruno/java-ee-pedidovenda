@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title><ui:insert name="titulo">Sistema de Pedidos de Venda</ui:insert></title>
+        <h:outputStylesheet library="css" name="sistema.css" />
+        <h:outputScript library="js" name="jquery.maskMoney.js"/>
+        <h:outputScript library="js" name="validadores.js"/> 
+	</h:head>
+
+	<h:body>
+		<!-- Para quando clicar no botão salvar das telas de cadastrados a telka será recarregada e a configuração de máscara de moeda
+		     seria perdida por isso usa-se onsuccess="configurarMoeda()" -->
+		<p:ajaxStatus styleClass="ajax-status" onsuccess="configurarMoeda()">
+			<f:facet name="start">
+				<h:graphicImage library="images" name="loading.gif"/>
+			</f:facet>
+			<f:facet name="complete">
+				<h:outputText value=""/>
+			</f:facet>
+		</p:ajaxStatus>
+	
+		<header>
+			<div style="float: left">
+				<h:link outcome="/Home">
+					<h:graphicImage library="images" name="logo-hoplon.png" />
+				</h:link>
+				<span> Hoplon Tecnologia </span>
+			</div>
+			
+			<div style="float: right; margin-right: 110px">
+				<!-- 
+	        	<p:themeSwitcher id="meuTema" value="#{configuracoesForm.meuTema}" effect="fold">
+			            <f:selectItem itemLabel="Escolha o tema" itemValue="" />
+			            <f:selectItems value="#{configuracoesForm.themes}" />
+			            <p:ajax/>
+		        </p:themeSwitcher>
+		        -->
+		        
+		        <p:themeSwitcher value="#{temaBean.temaSelecionado}">
+					<f:selectItems value="#{temaBean.temasDisponiveis}"/>
+					<p:ajax />
+				</p:themeSwitcher>
+			</div>
+			
+			<div style="float: right; margin-right: 110px">
+				<span style="float: left; height: 30px; line-height: 30px; margin-right: 60px">
+				Olá #{seguranca.nomeUsuario}!
+				</span>
+				
+				<h:form style="display: inline-block">
+					<p:menubar styleClass="menu-sistema">
+						<p:submenu label="Cadastros">
+							<p:submenu label="Tabelas">
+								<p:menuitem value="Categorias" />
+								<p:menuitem value="Subcategorias" />
+								<p:menuitem value="Cargos" outcome="/cargos/PesquisaCargos"/>
+							</p:submenu>
+							<p:separator/>
+							<p:menuitem value="Clientes" outcome="/clientes/PesquisaClientes"/>
+							<p:menuitem value="Usuários" outcome="/usuarios/PesquisaUsuarios" disabled="#{not seguranca.acessarUsuarioMenu}"/>
+							<p:menuitem value="Produtos" outcome="/produtos/PesquisaProdutos" />
+						</p:submenu>
+						<p:submenu label="Pedidos" icon="ui-icon-contact">
+							<p:menuitem value="Novo pedido" icon="ui-icon-document" outcome="/pedidos/CadastroPedido" />
+							<p:menuitem value="Pesquisa" outcome="/pedidos/PesquisaPedidos" />
+						</p:submenu>
+						<p:submenu label="Financeiro">
+							<p:menuitem value="Contas a receber"/>
+						</p:submenu>
+						<p:submenu label="Relatórios" icon="ui-icon-print">
+							<p:menuitem value="Clientes" />
+							<p:menuitem value="Pedidos" outcome="/relatorios/RelatorioPedidosEmitidos"/>
+							<p:menuitem value="Contas a receber/recebidas" />
+						</p:submenu>
+						<p:submenu label="Gráficos">
+							<p:menuitem value="Pedidos e vendedor" outcome="/graficos/GraficoPedidoVendedor" />
+							<p:menuitem value="Ranking por vendedor" outcome="/graficos/GraficoRankingVendedor" />
+						</p:submenu>
+						<p:menuitem value="Sair" icon="ui-icon-close" url="/j_spring_security_logout" />
+					</p:menubar>
+				</h:form>
+			</div>
+			<div style="clear: both"></div>		
+		</header>
+
+		<div id="conteudo">
+			<ui:insert name="corpo"/>
+		</div>
+		
+		<p:separator style="margin-top: 20px"/>
+		
+		<footer>
+			Sistemas Comerciais Java EE com CDI, JPA e PrimeFaces -
+			<a href="http://www.hoplon-tecnologia.com.br" target="_blank">www.hoplon-tecnologia.com.br</a>
+		</footer>
+		
+		<script>
+			function configurarMoeda() {
+				$(".moeda").maskMoney({ decimal: ",", thousands: ".", allowZero: true });
+			}
+			
+			$(document).ready(function() {
+				configurarMoeda();
+			});
+		</script>
+	</h:body>
+	
+</html>
+
+
